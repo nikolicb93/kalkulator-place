@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <title>Kalkulator Plaće</title>
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    label { display: block; margin-top: 10px; }
+    input { margin-top: 5px; padding: 5px; }
+    #rezultat { margin-top: 20px; font-weight: bold; }
+  </style>
+</head>
+<body>
+  <h1>Kalkulator Plaće</h1>
+
+  <label for="bruto">Bruto plaća (EUR):</label>
+  <input type="number" id="bruto" />
+
+  <label for="odbitak">Osobni odbitak (EUR):</label>
+  <input type="number" id="odbitak" value="600" />
+
+  <button onclick="izracunajPlacu()">Izračunaj neto</button>
+
+  <div id="rezultat"></div>
+
+  <script>
+    function izracunajPlacu() {
+      const bruto = parseFloat(document.getElementById('bruto').value);
+      const odbitak = parseFloat(document.getElementById('odbitak').value);
+
+      if (isNaN(bruto)) {
+        document.getElementById('rezultat').innerText = "Unesite valjanu bruto plaću.";
+        return;
+      }
+
+      // Pretpostavljene stope:
+      const mirovinsko1 = bruto * 0.15; // 15%
+      const mirovinsko2 = bruto * 0.05; // 5%
+      const mirovinskoUkupno = mirovinsko1 + mirovinsko2;
+
+      const osnovicaPoreza = bruto - mirovinskoUkupno - odbitak;
+      const poreznaOsnovica = osnovicaPoreza > 0 ? osnovicaPoreza : 0;
+
+      const porez = poreznaOsnovica * 0.2; // 20% porez
+      const prirez = porez * 0.1; // 10% prirez (ovisno o gradu)
+
+      const neto = bruto - mirovinskoUkupno - porez - prirez;
+
+      document.getElementById('rezultat').innerText =
+        `Neto plaća: ${neto.toFixed(2)} EUR`;
+    }
+  </script>
+</body>
+</html>
